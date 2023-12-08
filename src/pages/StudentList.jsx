@@ -2,8 +2,29 @@ import { FaCaretDown } from "react-icons/fa";
 import Header from "../Header";
 import MyButton from "../MyButton";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 function StudentList() {
   const navigate = useNavigate();
+  const [students, setStudents] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    // Gọi API để lấy danh sách sinh viên khi component được tải
+    // Lưu ý: Thay thế `YOUR_API_ENDPOINT` bằng địa chỉ thực tế của API của bạn
+    fetch("http://localhost:8080/api/v1/students?page=" + currentPage)
+      .then((response) => response.json())
+      .then((data) => {
+        setStudents(data.content);
+        setTotalPages(data.totalPages);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, [currentPage]);
+  const handlePageChange = (newPage) => {
+    // Xử lý sự kiện chuyển trang
+    setCurrentPage(newPage);
+  };
+
   return (
     <div className="w-[700px] ">
       <Header />
@@ -77,45 +98,33 @@ function StudentList() {
           </tr>
         </thead>
         <tbody>
-          <tr className="even:bg-gray-300">
-            <td className="border border-black">1</td>
-            <td className="border border-black">ABC001</td>
-            <td className="border border-black">John Doe</td>
-            <td className="border border-black">1990-05-15</td>
-            <td className="border border-black">123 Main St, City</td>
-            <td className="border border-black">85</td>
-            <td className="border border-black">
-              <a href="#">Edit</a>
-            </td>
-          </tr>
-          <tr className="even:bg-gray-300">
-            <td>2</td>
-            <td>XYZ002</td>
-            <td>Jane Smith</td>
-            <td>1985-08-22</td>
-            <td>456 Oak St, Town</td>
-            <td>92</td>
-            <td>
-              <a href="#">Edit</a>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>PQR003</td>
-            <td>Sam Johnson</td>
-            <td>1998-02-10</td>
-            <td>789 Pine St, Village</td>
-            <td>78</td>
-            <td>
-              <a href="#">Edit</a>
-            </td>
-          </tr>
+          {students.map((student, index) => (
+            <tr key={index} className={"even:bg-gray-300"}>
+              <td className="border border-black">{index + 1}</td>
+              <td className="border border-black">{student.studentCode}</td>
+              <td className="border border-black">{student.studentName}</td>
+              <td className="border border-black">
+                {new Date(student.dateOfBirth).toLocaleDateString()}
+              </td>
+              <td className="border border-black">{student.address}</td>
+              <td className="border border-black">{student.averageScore}</td>
+              <td className="border border-black">
+                <a href="#">Edit</a>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <div className="pt-10 flex justify-center gap-8">
         <div>
           <MyButton>first</MyButton>
-          <MyButton>pre</MyButton>
+          <MyButton
+            onClick={() => {
+              if (currentPage > 0) handlePageChange(currentPage - 1);
+            }}
+          >
+            pre
+          </MyButton>
         </div>
         <div>
           <MyButton>1</MyButton>
@@ -124,7 +133,9 @@ function StudentList() {
           <MyButton>4</MyButton>
         </div>
         <div>
-          <MyButton>next</MyButton>
+          <MyButton onClick={() => handlePageChange(currentPage + 1)}>
+            next
+          </MyButton>
           <MyButton>last</MyButton>
         </div>
       </div>

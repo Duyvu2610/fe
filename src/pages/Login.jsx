@@ -227,6 +227,9 @@ function Login() {
             <MyButton
               onClick={(e) => {
                 e.preventDefault();
+                setErrorMessage("");
+                setErrorPassword("");
+                setErrorRePassword("");
                 setIsRegister(false);
               }}
               className={`mr-4`}
@@ -243,6 +246,8 @@ function Login() {
             <MyButton
               onClick={(e) => {
                 e.preventDefault();
+                setErrorMessage("");
+                setErrorPassword("");
                 setIsRegister(true);
               }}
             >
