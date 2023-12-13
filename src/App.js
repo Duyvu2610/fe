@@ -26,7 +26,15 @@ function App() {
             }
           ></Route>
           <Route
-            path="/students/edit"
+            path="/students/edit/:studentId"
+            element={
+              <Layout>
+                <EditStudent />
+              </Layout>
+            }
+          ></Route>
+          <Route
+            path="/students/add"
             element={
               <Layout>
                 <EditStudent />

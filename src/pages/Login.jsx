@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyButton from "../MyButton";
+import MyInput from "../MyInput";
 
 function Login() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -65,6 +66,7 @@ function Login() {
         );
         // Xử lý phản hồi từ API tại đây, ví dụ:
         console.log(response.data);
+        sessionStorage.setItem("username", userName);
         navigate("/students");
       } catch (error) {
         setErrorPassword("Tài khoản hoặc mật khẩu không chính xác");
@@ -175,9 +177,9 @@ function Login() {
       <form action="" className="flex flex-col">
         <div className="flex justify-between">
           <label htmlFor="userName">User Name:</label>
-          <input
+          <MyInput
             type="text"
-            className="border w-[60%] border-black"
+            className="w-[60%] "
             name="userName"
             id="userName"
             maxLength={20}
@@ -190,9 +192,9 @@ function Login() {
         )}
         <div className="flex justify-between  mt-4">
           <label htmlFor="pw">Password:</label>
-          <input
+          <MyInput
             type="text"
-            className="border w-[60%] border-black"
+            className="w-[60%]"
             name="pw"
             id="pw"
             maxLength={15}
@@ -207,9 +209,9 @@ function Login() {
           <div>
             <div className="flex justify-between  mt-4">
               <label htmlFor="pw">Password Confirm:</label>
-              <input
+              <MyInput
                 type="text"
-                className="border w-[60%] border-black"
+                className="w-[60%] "
                 name="pw"
                 id="pw"
                 maxLength={15}

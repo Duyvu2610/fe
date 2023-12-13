@@ -1,4 +1,14 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 function Header() {
+  const navigate = useNavigate();
+  const [isAddHref, setIsAddHref] = useState(
+    window.location.href === "http://localhost:3000/students/add"
+  );
+  const handleLogout = () => {
+    sessionStorage.removeItem("username");
+    navigate("/");
+  };
   return (
     <header className="flex justify-between">
       <img
@@ -7,10 +17,14 @@ function Header() {
         className="w-[300px]"
       />
       <div className="flex gap-8">
-        <p>Welcome, vu</p>
-        <a href="/" className="text-blue-700 underline hover:text-red-600">
+        {!isAddHref && <p>Welcome, {sessionStorage.getItem("username")}</p>}
+        <button
+          href="/"
+          class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3"
+          onClick={handleLogout}
+        >
           Logout
-        </a>
+        </button>
       </div>
     </header>
   );
